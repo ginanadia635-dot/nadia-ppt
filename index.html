@@ -1247,6 +1247,22 @@
         function prevSlide() { if (currentSlideIndex > 0) { currentSlideIndex--; updateSlideUI(); } }
         function goToSlide(idx) { if (idx >= 0 && idx < slides.length) { currentSlideIndex = idx; updateSlideUI(); } }
 
+        /* KEYBOARD EVENT LISTENER UNTUK NAVIGASI SLIDE */
+        window.addEventListener('keydown', (e) => {
+            // Jangan aktifkan jika sedang mengetik di dalam textarea atau input
+            if (['TEXTAREA', 'INPUT'].includes(document.activeElement.tagName)) return;
+
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                prevSlide();
+            } else if (e.key === 'f' || e.key === 'F') {
+                toggleFullScreen();
+            }
+        });
+
         window.onload = () => {
             renderInteractiveVerses();
             switchContohTab('allah');
