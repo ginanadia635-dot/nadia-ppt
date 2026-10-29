@@ -898,21 +898,31 @@
             if (el) el.textContent = istighfarCounter;
         }
 
-        /* Full Screen Toggle Function */
+        /* Full Screen Toggle Function with Permissions Policy Handling */
         function toggleFullScreen() {
             const fsBtnText = document.getElementById('fullscreenText');
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().then(() => {
-                    if (fsBtnText) fsBtnText.textContent = 'Exit';
-                }).catch(err => {
-                    console.error("Fullscreen error:", err);
-                });
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen().then(() => {
-                        if (fsBtnText) fsBtnText.textContent = 'Full Screen';
-                    });
+            try {
+                if (!document.fullscreenElement) {
+                    if (document.documentElement.requestFullscreen) {
+                        document.documentElement.requestFullscreen().then(() => {
+                            if (fsBtnText) fsBtnText.textContent = 'Exit';
+                        }).catch(err => {
+                            console.warn("Fullscreen restricted by iframe permissions policy:", err);
+                        });
+                    } else {
+                        console.warn("Fullscreen API is not supported on this element.");
+                    }
+                } else {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen().then(() => {
+                            if (fsBtnText) fsBtnText.textContent = 'Full Screen';
+                        }).catch(err => {
+                            console.warn("Exit fullscreen error:", err);
+                        });
+                    }
                 }
+            } catch (err) {
+                console.warn("Fullscreen toggle prevented:", err);
             }
         }
 
