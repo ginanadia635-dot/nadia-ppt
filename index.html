@@ -276,8 +276,10 @@
             <button onclick="toggleModulInfoModal()" class="p-2 rounded-full hover:bg-royal-50 text-slate-700 hover:text-royal-600 transition" title="Identitas & Pengesahan Modul Ajar">
                 <i data-lucide="award" class="w-4 h-4"></i>
             </button>
-            <button onclick="toggleFullScreen()" class="p-2 rounded-full hover:bg-royal-50 text-slate-700 hover:text-royal-600 transition" title="Layar Penuh">
-                <i data-lucide="maximize-2" class="w-4 h-4"></i>
+            <!-- Tombol Fullscreen yang Dipertegas -->
+            <button onclick="toggleFullScreen()" id="fullscreenBtn" class="px-3 py-1.5 rounded-full bg-royal-600 hover:bg-royal-700 text-white font-extrabold text-[11px] flex items-center gap-1.5 shadow-sm transition" title="Tampilkan Layar Penuh (Fullscreen)">
+                <i data-lucide="maximize" class="w-3.5 h-3.5"></i>
+                <span class="hidden sm:inline" id="fullscreenText">Fullscreen</span>
             </button>
         </div>
     </header>
@@ -2117,10 +2119,19 @@
         }
 
         function toggleFullScreen() {
+            const fsBtnText = document.getElementById('fullscreenText');
             if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(() => {});
+                document.documentElement.requestFullscreen().then(() => {
+                    if (fsBtnText) fsBtnText.textContent = 'Exit';
+                }).catch((err) => {
+                    console.error("Error attempting to enable fullscreen:", err);
+                });
             } else {
-                document.exitFullscreen();
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().then(() => {
+                        if (fsBtnText) fsBtnText.textContent = 'Fullscreen';
+                    });
+                }
             }
         }
 
@@ -2179,7 +2190,7 @@
                         <span class="text-[10px] font-extrabold uppercase text-emerald-700">Contoh Hak Sesama 1</span>
                         <h3 class="text-sm font-extrabold text-slate-900 mt-1">Meminta Maaf Atas Ejekan</h3>
                         <p class="text-xs text-slate-600 mt-2 leading-relaxed">
-                            Jika pernah mengejek atau menyakiti perasaan teman, segera menghampiri, mengakui kesalahan, dan meminta maaf dengan tulus tulus ikhlas.
+                            Jika pernah mengejek atau menyakiti perasaan teman, segera menghampiri, mengakui kesalahan, dan meminta maaf dengan tulus ikhlas.
                         </p>
                     </div>
                     <div class="exec-card rounded-3xl p-5 border-t-4 border-t-emerald-600">
